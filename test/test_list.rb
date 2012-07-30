@@ -349,6 +349,25 @@ class DefaultScopedWhereTest < ActsAsListTestCase
 
 end
 
+class ScopedListTest < ActsAsListTestCase
+  
+  def setup
+    setup_db
+    (1..2).each do |parent|
+      (1..4).each { |counter| ListMixin.create! :pos => counter, :parent_id => parent }
+    end
+  end
+  
+  def test_reordering
+    assert_equal [1, 2, 3, 4], ListMixin.where(:parent_id => 1).map(&:pos)
+    assert_equal [1, 2, 3, 4], ListMixin.where(:parent_id => 2).map(&:pos)
+    ListMixin.where(:parent_id => 1).first.move_to_bottom
+    assert_equal [4, 1, 2, 3], ListMixin.where(:parent_id => 1).map(&:pos)
+    assert_equal [1, 2, 3, 4], ListMixin.where(:parent_id => 2).map(&:pos)
+  end
+  
+end
+
 #class TopAdditionMixin < Mixin
 
 class TopAdditionTest < ActsAsListTestCase
