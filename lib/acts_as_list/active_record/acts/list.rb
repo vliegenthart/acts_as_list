@@ -462,8 +462,8 @@ module ActiveRecord
           end
 
           def check_scope
-            reload
             if scope_changed?
+              reload_position
               swap_changed_attributes
               send('decrement_positions_on_lower_items') if lower_item
               swap_changed_attributes
