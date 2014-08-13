@@ -463,8 +463,8 @@ module ActiveRecord
 
           def check_scope
             if scope_changed?
-              swap_changed_attributes
               reload
+              swap_changed_attributes
               send('decrement_positions_on_lower_items') if lower_item
               swap_changed_attributes
               send("add_to_list_#{add_new_at}")
